@@ -1,6 +1,6 @@
 package algorithm.algorithm.tree;
 
-public class Node<T> {
+public class Node<T> implements Comparable<Node<T>>{
     
     private Node<T>  left;
     
@@ -17,6 +17,7 @@ public class Node<T> {
     }
 
     public T getData() {
+        
         return data;
     }
 
@@ -95,5 +96,24 @@ public class Node<T> {
             this.getRight().after();  
         System.out.println(this.toString());
     }
+    
+    public void createBinTree(T data){
+        Node<T> node = new Node<T>();
+        node.setData(data);
+        node.setLeft(node);
+        
+        node.setRight(node);
+    }
 
+    @SuppressWarnings("unchecked")
+    public int compareTo(Node<T> o) {
+         if(this.data instanceof Comparable){
+           return  ((Comparable) this.data).compareTo(o.data);
+         }
+        return 0;
+    }
+
+    
+
+   
 }

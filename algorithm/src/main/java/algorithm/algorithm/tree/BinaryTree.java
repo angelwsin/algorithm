@@ -1,16 +1,21 @@
 package algorithm.algorithm.tree;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class BinaryTree<T> {
     
     
-    private Node<T>  root;
+    protected Node<T>  root;
     
     BinaryTree(T root){
         this.root =  new Node<T>();
         this.root.setData(root);
     }
     
-   
+   public BinaryTree() {
+  }
     
     
     public void addLeft(T data){
@@ -22,12 +27,21 @@ public class BinaryTree<T> {
     }
     
     public static void main(String[] args) {
-        BinaryTree<String> tree = new BinaryTree<String>("root");
-        tree.addLeft("left");
-        tree.addRight("right");
-        //tree.first();
-        //tree.mid();
-        tree.after();
+        
+        BinaryTree<String> tree = new BinaryTree<String>();
+        List<String> list = new ArrayList<String>();
+        list.add("A");
+        list.add("B");
+        list.add(" ");
+        list.add(" ");
+        list.add("C");
+        list.add(" ");
+        list.add(" ");
+        tree.createTree(list);
+         tree.first();
+        
+        
+        
     }
     
     public void  first(){
@@ -40,6 +54,41 @@ public class BinaryTree<T> {
     
     public void after(){
         this.root.after();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Node<T> createBinTree(){
+        Scanner sc  = new Scanner(System.in);
+        String data = sc.nextLine();
+        System.out.println(data);
+        if(" ".equals(data))
+            return null;
+        Node<T> node = new Node<T>();
+        node.setData((T) data);
+        node.setLeft(createBinTree());
+        node.setRight(createBinTree());
+        return node;
+        
+    }
+    
+    public void createTree(){
+        this.root = createBinTree();
+    }
+    
+    public Node<T> createBinTree(List<T> list){
+        T data = list.remove(0);
+        if(" ".equals(data))
+            return null;
+        Node<T> node = new Node<T>();
+        node.setData(data);
+        node.setLeft(createBinTree(list));
+        node.setRight(createBinTree(list));
+        return node;
+        
+    }
+    
+    public void createTree(List<T> list){
+        this.root = createBinTree(list);
     }
 
 }
