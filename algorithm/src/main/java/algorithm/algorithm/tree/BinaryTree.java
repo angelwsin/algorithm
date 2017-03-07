@@ -32,11 +32,11 @@ public class BinaryTree<T> {
         List<String> list = new ArrayList<String>();
         list.add("A");
         list.add("B");
-        list.add(" ");
-        list.add(" ");
+        list.add(null);
+        list.add(null);
         list.add("C");
-        list.add(" ");
-        list.add(" ");
+        list.add(null);
+        list.add(null);
         tree.createTree(list);
          tree.first();
         
@@ -77,7 +77,7 @@ public class BinaryTree<T> {
     
     public Node<T> createBinTree(List<T> list){
         T data = list.remove(0);
-        if(" ".equals(data))
+        if(data==null)
             return null;
         Node<T> node = new Node<T>();
         node.setData(data);
