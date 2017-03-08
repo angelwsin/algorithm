@@ -90,5 +90,9 @@ public class BinaryTree<T> {
     public void createTree(List<T> list){
         this.root = createBinTree(list);
     }
+    
+    public int deep(){
+        return 0;
+    }
 
 }

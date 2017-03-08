@@ -2,11 +2,11 @@ package algorithm.algorithm.tree;
 
 public class Node<T> implements Comparable<Node<T>>{
     
-    private Node<T>  left;
+    protected Node<T>  left;
     
-    private T     data;
+    protected T     data;
     
-    private Node<T>  right;
+    protected Node<T>  right;
 
     public Node<T> getLeft() {
         return left;
@@ -64,26 +64,26 @@ public class Node<T> implements Comparable<Node<T>>{
     /*
      * 先序遍历  左根右
      */
-    public void  first(){
+    public void  mid(){
        if(this.getLeft()!=null) 
-          this.getLeft().first();
+          this.getLeft().mid();
        
        System.out.println(this.toString());
        if(this.getRight()!=null)
-           this.getRight().first();
+           this.getRight().mid();
          
     }
     
     /*
      * 中序遍历 根左右
      */
-    public void mid(){
+    public void first(){
         System.out.println(this.toString());
         
         if(this.getLeft()!=null) 
-            this.getLeft().mid();
+            this.getLeft().first();
         if(this.getRight()!=null)
-            this.getRight().mid();
+            this.getRight().first();
     }
     
     /*
@@ -108,9 +108,22 @@ public class Node<T> implements Comparable<Node<T>>{
     @SuppressWarnings("unchecked")
     public int compareTo(Node<T> o) {
          if(this.data instanceof Comparable){
-           return  ((Comparable) this.data).compareTo(o.data);
+           return  ((Comparable<T>) this.data).compareTo(o.data);
          }
         return 0;
+    }
+    
+    
+    public boolean isLeafNode(){
+           return this.left==null&&this.right==null;
+    }
+    
+    public boolean isLeft(){
+         return this.left!=null&&this.right==null;
+    }
+    
+    public boolean isRight(){
+        return this.right!=null&&this.left==null;
     }
 
     

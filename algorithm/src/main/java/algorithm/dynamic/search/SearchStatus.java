@@ -1,6 +1,7 @@
 package algorithm.dynamic.search;
 
 import algorithm.algorithm.tree.Node;
+import algorithm.algorithm.tree.NodeType;
 
 public class SearchStatus<T> {
     
@@ -8,6 +9,8 @@ public class SearchStatus<T> {
     private Node<T>  sucess;
     
     private Node<T>  fail;
+    
+    private NodeType   nodeType = NodeType.Root;
 
     public Node<T> getSucess() {
         return sucess;
@@ -23,6 +26,14 @@ public class SearchStatus<T> {
 
     public void setFail(Node<T> fail) {
         this.fail = fail;
+    }
+
+    public NodeType getNodeType() {
+        return nodeType;
+    }
+
+    public void setNodeType(NodeType nodeType) {
+        this.nodeType = nodeType;
     }
     
     
