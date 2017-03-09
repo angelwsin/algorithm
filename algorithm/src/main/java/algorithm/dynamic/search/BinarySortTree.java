@@ -67,7 +67,7 @@ public class BinarySortTree<T> extends BinaryTree<T>{
      * @param key
      * @return
      */
-    private  SearchStatus<T> search(Node<T> node,Node<T> key,SearchStatus<T> local){
+    public  SearchStatus<T> search(Node<T> node,Node<T> key,SearchStatus<T> local){
         
         if(node==null)return local;
         if(node.compareTo(key)==0){

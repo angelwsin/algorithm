@@ -11,6 +11,8 @@ public class SearchStatus<T> {
     private Node<T>  fail;
     
     private NodeType   nodeType = NodeType.Root;
+    
+    private boolean   isExist = true;
 
     public Node<T> getSucess() {
         return sucess;
@@ -34,6 +36,14 @@ public class SearchStatus<T> {
 
     public void setNodeType(NodeType nodeType) {
         this.nodeType = nodeType;
+    }
+
+    public boolean isExist() {
+        return isExist;
+    }
+
+    public void setExist(boolean isExist) {
+        this.isExist = isExist;
     }
     
     
