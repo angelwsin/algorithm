@@ -60,7 +60,7 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
         SearchStatus<T> local = search1(key);
         BSTNode<T> node = (BSTNode<T>) local.getFail();
         BSTNode<T> success = (BSTNode<T>) local.getSucess();
-        if(node!=null&&success==null){
+       /* if(node!=null&&success==null){
             if(node.compareTo(key)>0){
                 node.setLeft(key);
                  node.setBf(1);
@@ -80,14 +80,14 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
                     this.root = key; 
             }
            
-        }
+        }*/
     }
     
     @Override
     public  SearchStatus<T> search(Node<T> node,Node<T> key,SearchStatus<T> local){
         
         
-        if(node==null){ local.setExist(false);return local;};
+        if(node==null){ node=key;return local;};
         
         if (node.compareTo(key) == 0) {
             local.setSucess(node);
@@ -96,19 +96,11 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
             local.setFail(node);
             local.setNodeType(NodeType.Left);
            SearchStatus<T> localx =search(node.getLeft(), key, local);
-            if (!localx.isExist()&&node instanceof BSTNode) {
-                BSTNode<T> bst = (BSTNode<T>) node;
-               // bst.setBf(bst.getBf() + 1);
-            }
             return localx;
         } else {
             local.setFail(node);
             local.setNodeType(NodeType.Right);
             SearchStatus<T> localx = search(node.getRight(), key, local);
-            if (!localx.isExist()&&node instanceof BSTNode) {
-                BSTNode<T> bst = (BSTNode<T>) node;
-                //bst.setBf(bst.getBf() - 1);
-            }
             return localx;
         }
         
