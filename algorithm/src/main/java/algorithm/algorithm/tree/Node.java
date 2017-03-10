@@ -1,5 +1,7 @@
 package algorithm.algorithm.tree;
 
+import algorithm.dynamic.search.Status;
+
 public class Node<T> implements Comparable<Node<T>>{
     
     protected Node<T>  left;
@@ -7,6 +9,8 @@ public class Node<T> implements Comparable<Node<T>>{
     protected T     data;
     
     protected Node<T>  right;
+    
+    protected Node<T>  parent;
 
     public Node<T> getLeft() {
         return left;
@@ -126,7 +130,68 @@ public class Node<T> implements Comparable<Node<T>>{
         return this.right!=null&&this.left==null;
     }
 
+    public boolean search(Node<T> key){
+         if(this.compareTo(key)==0){
+             System.out.println("查找到:"+key);
+             return true;
+         } else if (this.compareTo(key) > 0){
+             if(this.getLeft()==null){
+                 this.setLeft(key);
+                 return false;
+             }
+             this.getLeft().search(key);
+         }else if (this.compareTo(key) < 0){
+             if(this.getRight()==null){
+                 this.setRight(key);
+                 return false;
+             }
+             this.getRight().search(key);
+         }
+         return false;
+    }
+    public boolean searchX(Node<T> key){
+        if(this.compareTo(key)==0){
+            System.out.println("查找到:"+key);
+            return true;
+        } else if (this.compareTo(key) > 0){
+            if(this.getLeft()!=null){
+                this.getLeft().search(key);
+            }
+           
+        }else if (this.compareTo(key) < 0){
+            if(this.getRight()!=null){
+                this.getRight().search(key);
+            }
+            
+        }
+        return false;
+   }
+    
+    public Status<T> searchV(Node<T> key){
+              return null;
+           }
     
 
+    public Node<T> leftRotate(){
+        Node<T> right =  this.getRight();
+        this.setRight(right.getLeft());
+        right.setLeft(this);
+        return right;
+    }
+    
+    public Node<T> rightRotate(){
+        Node<T> left =   this.getLeft();
+        this.setLeft(left.getRight());
+        left.setRight(this);
+        return left;
+    }
+
+    public Node<T> getParent() {
+        return parent;
+    }
+
+    public void setParent(Node<T> parent) {
+        this.parent = parent;
+    }
    
 }

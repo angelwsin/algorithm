@@ -32,6 +32,8 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
         list.add(53);
         for(Integer node : list){
             tree.search(node);
+           
+            //tree.searchV(node);
         }
         tree.mid();
         System.out.println(tree.root);
@@ -60,8 +62,10 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
         SearchStatus<T> local = search1(key);
         BSTNode<T> node = (BSTNode<T>) local.getFail();
         BSTNode<T> success = (BSTNode<T>) local.getSucess();
-       /* if(node!=null&&success==null){
-            if(node.compareTo(key)>0){
+        if(node!=null&&success==null){
+            this.root = local.getRoot();
+            
+         /*  if(node.compareTo(key)>0){
                 node.setLeft(key);
                  node.setBf(1);
                 insertLeft(node);
@@ -70,7 +74,8 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
                 node.setBf(-1);
                 insertRight(node);
                 
-            }
+            }*/
+            
         }else {
             if(success!=null){
                 String pre =  node==null?"无":node.toString();
@@ -80,29 +85,62 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
                     this.root = key; 
             }
            
-        }*/
+        }
     }
     
+    //没有指针的概念 真不爽
     @Override
     public  SearchStatus<T> search(Node<T> node,Node<T> key,SearchStatus<T> local){
         
-        
-        if(node==null){ node=key;return local;};
-        
+        if (node == null) {
+            local.setExist(false);
+            if (local.getFail() == null) {
+                node = key;
+                return local;
+            } else {
+                if (local.getNodeType() == NodeType.Left) {
+                    local.getFail().setLeft(key);
+                } else if (local.getNodeType() == NodeType.Right) {
+                    local.getFail().setRight(key);
+                }
+            }
+
+            return local;
+        }
+        node.setParent(local.getParent());
+        local.setParent(node);
         if (node.compareTo(key) == 0) {
             local.setSucess(node);
             return local;
         } else if (node.compareTo(key) > 0) {
             local.setFail(node);
             local.setNodeType(NodeType.Left);
+            
            SearchStatus<T> localx =search(node.getLeft(), key, local);
+            if(localx.isExist()) return localx;
+            Balance<T> bal= insertLeft(node);
+            localx.setRoot(bal.getNode());
+            if(BalanceType.leftAndRight==bal.getType())
+                node.getParent().setLeft(localx.getRoot());
             return localx;
         } else {
             local.setFail(node);
             local.setNodeType(NodeType.Right);
             SearchStatus<T> localx = search(node.getRight(), key, local);
+            if(localx.isExist()) return localx;
+            Balance<T> bal= insertRight(node);
+            localx.setRoot(bal.getNode());
+            if(BalanceType.rightAndLeft==bal.getType())
+                node.getParent().setRight(localx.getRoot());
             return localx;
         }
+        
+    }
+     public  void searchV(T data){
+         BSTNode<T> key = new BSTNode<T>();
+         key.setData(data);
+        if(this.root==null){ this.root = key; return;}
+        this.root.search(key);
         
     }
      
@@ -118,18 +156,19 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
         Node<T> right =  node.getRight();
         node.setRight(right.getLeft());
         right.setLeft(node);
-       return node = right;
+       return  right;
     }
     
     public Node<T> rightRotate(Node<T> node){
         Node<T> left =   node.getLeft();
         node.setLeft(left.getRight());
         left.setRight(node);
-        return node= left;
+        return  left;
     }
     
-    private void insertLeft(Node<T> node) {
-        BSTNode<T> root = (BSTNode<T>) this.root;
+    private Balance<T>  insertLeft(Node<T> node) {
+        Balance<T> bal = new Balance<T>();
+        BSTNode<T> root = (BSTNode<T>) node;
         switch (root.getBf()) {
             case 0: {
                 root.setBf(1);
@@ -138,9 +177,10 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
             case 1: {
                 BSTNode<T> left = (BSTNode<T>) root.getLeft();
                 if (left.getBf() == 1) {
-                    this.root = rightRotate(this.root);
+                    node = rightRotate(node);
                     root.setBf(0);
                     left.setBf(0);
+                    bal.setType(BalanceType.right);
                 } else if (left.getBf() == -1) {
                     BSTNode<T> rd = (BSTNode<T>) left.getRight();
                     switch (rd.getBf()) {
@@ -159,8 +199,9 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
 
                     }
                     rd.setBf(0);
-                    this.root.setLeft(leftRotate(this.root.getLeft()));
-                    this.root= rightRotate(this.root);
+                    node.setLeft(leftRotate(node.getLeft()));
+                    node= rightRotate(node);
+                    bal.setType(BalanceType.leftAndRight);
                 }
                 break;
             }
@@ -170,10 +211,13 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
             }
 
         }
+        bal.setNode(node);
+        return bal;
     }
 
-    private void insertRight(Node<T> node) {
-        BSTNode<T> root = (BSTNode<T>) this.root;
+    private Balance<T>  insertRight(Node<T> node) {
+        Balance<T> bal = new Balance<T>();
+        BSTNode<T> root = (BSTNode<T>) node;
         switch (root.getBf()) {
             case 0: {
                 root.setBf(-1);
@@ -187,9 +231,10 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
 
                 BSTNode<T> right = (BSTNode<T>) root.getRight();
                 if (right.getBf() == -1) {
-                    this.root = leftRotate(this.root);
+                    node = leftRotate(node);
                     root.setBf(0);
                     right.setBf(0);
+                    bal.setType(BalanceType.left);
                 } else if (right.getBf() == 1) {
                     BSTNode<T> rd = (BSTNode<T>) right.getLeft();
                     switch (rd.getBf()) {
@@ -208,13 +253,30 @@ public class BalancedBinaryTree<T> extends BinarySortTree<T>{
 
                     }
                     rd.setBf(0);
-                    this.root.setRight(rightRotate(this.root.getRight()));
-                    this.root = leftRotate(this.root);
+                    node.setRight(rightRotate(node.getRight()));
+                    node = leftRotate(node);
+                    bal.setType(BalanceType.rightAndLeft);
                 }
                 break;
 
             }
 
+        }
+        bal.setNode(node);
+        return bal;
+    }
+    
+ public  Node<T> search(Node<T>parent,Node<T> node,Node<T> key){
+       
+        if(node==null) return node;
+        
+         node.setParent(parent);
+        if (node.compareTo(key) == 0) {
+           return node;
+        } else if (node.compareTo(key) > 0) {
+           return search(node, node.getLeft(), key);
+        } else {
+           return search(node, node.getRight(), key);
         }
     }
 

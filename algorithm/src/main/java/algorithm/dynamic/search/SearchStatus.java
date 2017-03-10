@@ -13,6 +13,10 @@ public class SearchStatus<T> {
     private NodeType   nodeType = NodeType.Root;
     
     private boolean   isExist = true;
+    
+    private Node<T>    root;
+    
+    private Node<T>    parent;
 
     public Node<T> getSucess() {
         return sucess;
@@ -44,6 +48,22 @@ public class SearchStatus<T> {
 
     public void setExist(boolean isExist) {
         this.isExist = isExist;
+    }
+
+    public Node<T> getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node<T> root) {
+        this.root = root;
+    }
+
+    public Node<T> getParent() {
+        return parent;
+    }
+
+    public void setParent(Node<T> parent) {
+        this.parent = parent;
     }
     
     
